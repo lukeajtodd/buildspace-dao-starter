@@ -1,11 +1,10 @@
-# buildspace x thirdweb - Build your own DAO with just Javascript
+# Generic DAO (Starter kit for a DAO)
 
-### **Welcome 👋**
-To get started with this course, clone this repo and follow these commands:
+With this repo you will be able to be up and running in a few steps with your own DAO. It will include a membership NFT and more (fill in as we go)
 
-1. Run `npm install` at the root of your directory
-2. Run `npm start` to start the project
-3. Start coding!
+## Setup
 
-### **Questions?**
-Have some questions make sure you head over to your [buildspace Dashboard](https://app.buildspace.so/projects/COb520aae3-7925-42f4-a5e7-eaf718933766) and link your Discord account so you can get access to helpful channels and your instructor!
+- `npm install`
+- Copy the contents of .env.example to .env and fill in the required details
+
+This needs continually filling in as we go.
