@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useWeb3 } from "@3rdweb/hooks";
 
 const App = () => {
