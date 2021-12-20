@@ -8,3 +8,7 @@ With this repo you will be able to be up and running in a few steps with your ow
 - Copy the contents of .env.example to .env and fill in the required details
 
 This needs continually filling in as we go.
+
+## Todo
+
+- Setup `config.json` to store the configuration for settings up the sdk and bundle drop
