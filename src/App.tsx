@@ -1,12 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { useWeb3 } from "@3rdweb/hooks"
 import { ThirdwebSDK } from '@3rdweb/sdk'
+import { ethers } from "ethers"
+
 import config from './config.json'
 
 const sdk = new ThirdwebSDK("rinkeby")
 
 const bundleDropModule = sdk.getBundleDropModule(
   config.BUNDLE_DROP_ADDRESS
+)
+
+const tokenModule = sdk.getTokenModule(
+  config.TOKEN_MODULE_ADDRESS
 )
 
 const App = () => {
@@ -16,6 +22,49 @@ const App = () => {
 
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false)
   const [isClaiming, setIsClaiming] = useState(false)
+  const [memberTokenAmounts, setMemberTokenAmounts] = useState<Record<string, ethers.BigNumber>>({})
+  const [memberAddresses, setMemberAddresses] = useState<string[]>([])
+
+  const shortenAddress = (address: string) => {
+    return address.substring(0, 6) + "..." + address.substring(address.length - 4)
+  }
+
+  useEffect(() => {
+    if (!hasClaimedNFT) return
+
+    bundleDropModule
+      .getAllClaimerAddresses("0")
+      .then(addresses => {
+        console.log("Member addresses: ", addresses)
+        setMemberAddresses(addresses)
+      })
+      .catch(err => {
+        console.error("Failed to get member addresses", err)
+      })
+  }, [hasClaimedNFT])
+
+  useEffect(() => {
+    if (!hasClaimedNFT) return
+
+    tokenModule
+      .getAllHolderBalances()
+      .then(amounts => {
+        console.log("Member token amounts: ", amounts)
+        setMemberTokenAmounts(amounts)
+      })
+      .catch(err => {
+        console.error("Failed to get member token amounts", err)
+      })
+  }, [hasClaimedNFT])
+
+  const memberList = useMemo(() => {
+    return memberAddresses.map(address => {
+      return {
+        address,
+        tokenAmount: ethers.utils.formatUnits(memberTokenAmounts[address] || 0, 18)
+      }
+    })
+  }, [memberAddresses, memberTokenAmounts])
 
   useEffect(() => {
     if (!signer) return
@@ -61,6 +110,29 @@ const App = () => {
       <div className="member-page">
         <h1>🍪DAO Member Page</h1>
         <p>Congratulations on being a member</p>
+        <div>
+          <div>
+            <h2>Member List</h2>
+            <table className="card">
+              <thead>
+                <tr>
+                  <th>Address</th>
+                  <th>Token Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {memberList.map((member) => {
+                  return (
+                    <tr key={member.address}>
+                      <td>{shortenAddress(member.address)}</td>
+                      <td>{member.tokenAmount}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     )
   }
