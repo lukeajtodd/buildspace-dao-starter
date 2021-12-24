@@ -11,4 +11,4 @@ This needs continually filling in as we go.
 
 ## Todo
 
-- Setup `config.json` to store the configuration for settings up the sdk and bundle drop
+- Alter the setup to create a starter template for anyone to set up their own DAO using ThirdWeb
